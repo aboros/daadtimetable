@@ -17,7 +17,6 @@ type EventApiResponse = {
   start_time: string
   end_time: string
   locations?: { id: string; name: string }
-  // ...other fields
 }
 
 export default function Home() {
