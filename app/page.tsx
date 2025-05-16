@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
-import type { Event, EventWithSelection } from '@/types'
+import { useState, useEffect } from 'react'
+import type { EventWithSelection } from '@/types'
 import { Card } from '@/components/ui/card'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
@@ -10,6 +10,15 @@ import { Label } from '@/components/ui/label'
 const EDGE_BASE = 'https://djgxlpdtbbykkmqtxeyf.supabase.co/functions/v1/list_events'
 const EDGE_DATES = 'https://djgxlpdtbbykkmqtxeyf.supabase.co/functions/v1/list_event_dates'
 const EDGE_LOCATIONS = 'https://djgxlpdtbbykkmqtxeyf.supabase.co/functions/v1/list_locations'
+
+type EventApiResponse = {
+  id: string
+  summary: string
+  start_time: string
+  end_time: string
+  locations?: { id: string; name: string }
+  // ...other fields
+}
 
 export default function Home() {
   const [events, setEvents] = useState<EventWithSelection[]>([])
@@ -41,12 +50,11 @@ export default function Home() {
       const res = await fetch(url)
       if (!res.ok) throw new Error('Failed to fetch events')
       const data = await res.json()
-      console.log('Raw event data for AM/BEACH:', data.find(e => e.locations?.name === 'AM/BEACH'))
       // Map locations.name to event.location
-      const mapped = (data || []).map((e: any) => ({
+      const mapped = (data || []).map((e: EventApiResponse) => ({
         ...e,
         location: e.locations?.name || '',
-        locations: e.locations  // explicitly preserve the locations object
+        locations: e.locations
       }))
       setEvents(mapped)
     } catch (err) {

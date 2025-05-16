@@ -25,8 +25,8 @@ export default function RootLayout({
               </div>
               <nav>
                 <ul className="flex space-x-6">
-                  <li><a href="/" className="hover:text-indigo-200 transition-colors">Browse</a></li>
-                  <li><a href="/download" className="hover:text-indigo-200 transition-colors">Download</a></li>
+                  <Link href="/">Browse</Link>
+                  <Link href="/download">Download</Link>
                 </ul>
               </nav>
             </div>
